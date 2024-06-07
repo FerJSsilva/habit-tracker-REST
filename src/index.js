@@ -1,12 +1,46 @@
-// sample code, please replace the content with your code
+import server from "./config/server";
+import mongoose from 'mongoose';
+import connectToDatabase from './config/database';
+import preSerialization from './hooks/preSerialization';
+import fastifyMongooseAPI from "fastify-mongoose-api";
+import dotenv from 'dotenv';
+dotenv.config();
 
-import { createServer } from 'http';  // ES module import
+/* ----------------------- Load environment variables ----------------------- */
 
-const os = require('os');  // CommonJS require
+/* ----------------------------- MongoDB Models ----------------------------- */
 
-const server = createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end(`Hello, your OS is ${os.type()}`);
+import './models/Achievment';
+import './models/Category';
+import './models/Habit';
+import './models/User';
+import './models/UserHabit';
+
+/* ------------------------------- Fastify Plugins ------------------------------ */
+
+server.register(fastifyMongooseAPI, {
+  models: mongoose.models,
+  prefix: "/api/",
+  methods: ["list", "get", "post", "patch", "delete"],
+  setDefaults: true,
 });
 
-server.listen(3000, () => console.log('Server running on http://localhost:3000'));
+/* ------------------------------- Fastify Hooks ------------------------------ */
+
+server.addHook('preSerialization', preSerialization);
+
+/* ------------------------------- Start Server ------------------------------ */
+const start = async () => {
+  try {
+    connectToDatabase();
+    await server.listen({ port: 4000 });
+    server.log.info(
+      `Server running on http://localhost:${server.server.address().port}`
+    );
+  } catch (err) {
+    server.log.error(err);
+    process.exit(1);
+  }
+};
+
+start();
