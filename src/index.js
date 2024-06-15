@@ -1,12 +1,16 @@
-import server from "./config/server";
+import fastify from 'fastify';
+import fastifyFormbody from '@fastify/formbody';
 import mongoose from 'mongoose';
 import connectToDatabase from './config/database';
 import preSerialization from './hooks/preSerialization';
 import fastifyMongooseAPI from "fastify-mongoose-api";
 import dotenv from 'dotenv';
+
 dotenv.config();
 
-/* ----------------------- Load environment variables ----------------------- */
+const server = fastify({ logger: true });
+
+server.register(fastifyFormbody);
 
 /* ----------------------------- MongoDB Models ----------------------------- */
 
@@ -34,10 +38,7 @@ const start = async () => {
   try {
     connectToDatabase();
     const port = process.env.PORT || 4000;
-    await fastify.listen({ port, host: '0.0.0.0' });
-    console.log(
-      `Server running on port: ${server.server.address().port}`
-    );
+    await server.listen({ port, host: '0.0.0.0' });
   } catch (err) {
     server.log.error(err);
     process.exit(1);
