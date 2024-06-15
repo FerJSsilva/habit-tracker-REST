@@ -9,7 +9,7 @@
   "scripts": {
     "build": "esbuild src/index.js --bundle --outfile=dist/bundle.js --platform=node --format=cjs",
     "watch": "chokidar \"src/**/*\" -c \"npm run build\"",
-    "server": "node dist/bundle.js",
+    "server": "npm run build && node dist/bundle.js",
     "start": "npm run build && concurrently \"npm run watch\" \"nodemon dist/bundle.js\""
   },
   "devDependencies": {
