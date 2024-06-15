@@ -34,8 +34,8 @@ const start = async () => {
   try {
     connectToDatabase();
     await server.listen({ port: process.env.PORT || 4000 });
-    server.log.info(
-      `Server running on http://localhost:${server.server.address().port}`
+    console.log(
+      `Server running on port: ${server.server.address().port}`
     );
   } catch (err) {
     server.log.error(err);
