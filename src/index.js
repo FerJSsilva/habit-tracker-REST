@@ -33,7 +33,8 @@ server.addHook('preSerialization', preSerialization);
 const start = async () => {
   try {
     connectToDatabase();
-    await server.listen({ port: process.env.PORT || 4000 });
+    const port = process.env.PORT || 4000;
+    await fastify.listen({ port, host: '0.0.0.0' });
     console.log(
       `Server running on port: ${server.server.address().port}`
     );
