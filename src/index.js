@@ -33,7 +33,7 @@ server.addHook('preSerialization', preSerialization);
 const start = async () => {
   try {
     connectToDatabase();
-    await server.listen({ port: 4000 });
+    await server.listen({ port: process.env.PORT || 4000 });
     server.log.info(
       `Server running on http://localhost:${server.server.address().port}`
     );
