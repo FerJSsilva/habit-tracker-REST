@@ -58,3 +58,10 @@ This will bundle all JavaScript files into a single output file in the `dist` di
 - `npm run start`: Starts the server using the production bundle.
 
 For more detailed documentation on `esbuild`, visit the [official esbuild GitHub page](https://github.com/evanw/esbuild).
+
+## How to use
+
+- schema.statics.apiPost DESABILITA POST
+- schema.methods.apiValues DESABILITA GET
+- schema.methods.apiPut DESABILITA PUT
+- schema.methods.apiDelete DESABILITA DELETE
