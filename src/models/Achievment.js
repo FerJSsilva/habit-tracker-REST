@@ -27,6 +27,5 @@ const AchievmentSchema = new Schema({
       required: true
     },
   });
-  
 
 mongoose.model('Achievment', AchievmentSchema);

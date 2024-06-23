@@ -2,12 +2,22 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const habitSchema = new Schema({
-  category: Number,
-  name: String,
-  description: String,
+  identifier: {
+    type: String,
+    required: true,
+    unique: true,
+    uppercase: true,
+    maxLength: 20,
+    trim: true,
+    match: [/^[^\s]*$/, 'Identifier must not contain spaces, use underscores instead'],
+  },
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true
+  },
 });
 
-// Desabilitar o método DELETE
 habitSchema.methods.apiDelete = async function () {
   throw new Error('DELETE is disabled');
 };

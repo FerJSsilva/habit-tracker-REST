@@ -16,7 +16,9 @@ server.register(fastifyFormbody);
 
 import './models/Achievment';
 import './models/Category';
+import './models/CategoryTranslation';
 import './models/Habit';
+import './models/HabitTranslation';
 import './models/User';
 import './models/UserHabit';
 
@@ -25,7 +27,7 @@ import './models/UserHabit';
 server.register(fastifyMongooseAPI, {
   models: mongoose.models,
   prefix: "/api/",
-  methods: ["list", "get", "post", "patch", "delete"],
+  methods: ["list", "get", "post", "put", "delete"],
   setDefaults: true,
 });
 

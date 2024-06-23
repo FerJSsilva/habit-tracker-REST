@@ -2,9 +2,15 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const categorySchema = new Schema({
-  id: Number,
-  name: String,
-  description: String,
+  identifier: {
+    type: String,
+    required: true,
+    unique: true,
+    uppercase: true,
+    maxLength: 20,
+    trim: true,
+    match: [/^[^\s]*$/, 'Identifier must not contain spaces, use underscores instead'],
+  },
 });
 
 mongoose.model('Category', categorySchema);
