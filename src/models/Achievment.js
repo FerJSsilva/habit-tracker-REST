@@ -6,7 +6,7 @@ const { Schema } = mongoose;
 const AchievmentSchema = new Schema({
     habitId: {
       type: Schema.Types.ObjectId,
-      ref: 'Habit',
+      ref: 'habit',
       required: true
     },
     userId: {
@@ -28,4 +28,4 @@ const AchievmentSchema = new Schema({
     },
   });
 
-mongoose.model('Achievment', AchievmentSchema);
+mongoose.model('achievment', AchievmentSchema);

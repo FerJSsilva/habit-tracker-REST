@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const UserHabitSchema = new Schema({
   habitId: {
     type: Schema.Types.ObjectId,
-    ref: 'Habit',
+    ref: 'habit',
     required: true
   },
   userId: {
@@ -55,6 +55,6 @@ const UserHabitSchema = new Schema({
   }
 });
 
-const UserHabit = mongoose.model('UserHabit', UserHabitSchema);
+const UserHabit = mongoose.model('user_habit', UserHabitSchema);
 
 module.exports = UserHabit;

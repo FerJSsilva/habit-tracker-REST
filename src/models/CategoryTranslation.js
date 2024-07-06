@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const CategoryTranslationSchema = new mongoose.Schema({
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
+    ref: "category",
     required: true,
   },
   language: {
@@ -28,7 +28,7 @@ const CategoryTranslationSchema = new mongoose.Schema({
 });
 
 const CategoryTranslation = mongoose.model(
-  "CategoryTranslation",
+  "category_translation",
   CategoryTranslationSchema
 );
 

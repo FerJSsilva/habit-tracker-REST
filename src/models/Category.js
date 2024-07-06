@@ -13,4 +13,20 @@ const categorySchema = new Schema({
   },
 });
 
-mongoose.model('Category', categorySchema);
+ /* --------------------------- Disable POST Method -------------------------- */
+categorySchema.statics.apiPost = async function (body) {
+  throw new Error('POST is disabled');
+}
+
+/* -------------------------- Disable UPDATE method ------------------------- */
+categorySchema.methods.apiPut = async function (body) {
+  console.log('body >>>>>>>>>>>>>>>>>>>>>');
+  throw new Error('UPDATE is disabled');
+}
+
+/* -------------------------- Disable DELETE method ------------------------- */
+categorySchema.methods.apiDelete = async function () {
+  throw new Error('DELETE is disabled');
+}
+
+mongoose.model('category', categorySchema);

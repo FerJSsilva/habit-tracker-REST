@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const HabitTranslationSchema = new mongoose.Schema({
   habitId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Habit",
+    ref: "habit",
     required: true,
   },
   language: {
@@ -27,7 +27,7 @@ const HabitTranslationSchema = new mongoose.Schema({
 });
 
 const HabitTranslation = mongoose.model(
-  "HabitTranslation",
+  "habit_translation",
   HabitTranslationSchema
 );
 

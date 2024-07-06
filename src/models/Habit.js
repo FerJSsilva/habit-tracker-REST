@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const habitSchema = new Schema({
+  categoryId: {
+    type: Schema.Types.ObjectId,
+    ref: 'category',
+    required: true
+  },
   identifier: {
     type: String,
     required: true,
@@ -11,15 +16,10 @@ const habitSchema = new Schema({
     trim: true,
     match: [/^[^\s]*$/, 'Identifier must not contain spaces, use underscores instead'],
   },
-  categoryId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
-  },
 });
 
 habitSchema.methods.apiDelete = async function () {
   throw new Error('DELETE is disabled');
 };
 
-mongoose.model('Habit', habitSchema);
+mongoose.model('habit', habitSchema);
