@@ -20,7 +20,6 @@ categorySchema.statics.apiPost = async function (body) {
 
 /* -------------------------- Disable UPDATE method ------------------------- */
 categorySchema.methods.apiPut = async function (body) {
-  console.log('body >>>>>>>>>>>>>>>>>>>>>');
   throw new Error('UPDATE is disabled');
 }
 
