@@ -27,7 +27,7 @@ import './models/UserHabit';
 server.register(fastifyMongooseAPI, {
   models: mongoose.models,
   prefix: "/api/",
-  methods: ["list", "get", "post", "put", "delete"],
+  methods: ["list", "get", "post", "patch", "put", "delete"],
   setDefaults: true,
 });
 
