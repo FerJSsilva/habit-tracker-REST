@@ -1,0 +1,50 @@
+// ------------------------------- Categories ------------------------------- //
+
+### LIST
+GET http://localhost:4000/api/categories
+
+// ------------------------- Categorie translations ------------------------- //
+
+### CATEGORY TRANSLATIONS
+GET http://localhost:4000/api/category-translations
+
+// --------------------------------- Habits --------------------------------- //
+
+### LIST
+GET http://localhost:4000/api/habits
+
+### NEW
+POST http://localhost:4000/api/habits
+Content-Type: application/json
+
+{
+    "categoryId": "6678b09bc4b03dfda03fa6a3",
+    "identifier": "WRITE_JOURNAL"
+}
+
+// --------------------------- Habit translations --------------------------- //
+
+### HABIT TRANSLATIONS
+GET http://localhost:4000/api/habit-translations
+
+### NEW HABIT TRANSLATION
+POST http://localhost:4000/api/habit-translations
+Content-Type: application/json
+
+{
+    "habitId": "668b5559464e18ff44ecc92f",
+    "language": "pt-br",
+    "name": "Escrever um diário",
+    "description": "screver reflexões diárias para melhorar a escrita e a autoanálise."
+}
+
+### EDIT HABIT TRANSLATION
+PUT http://localhost:4000/api/habit-translations/668b573752b1a31a65bf7348
+Content-Type: application/json
+
+{
+    "habitId": "668b5380464e18ff44ecc911",
+    "language": "pt-br",
+    "name": "Musculação",
+    "description": "Ir à academia para uma sessão de musculação quatro vezes por semana."
+}
