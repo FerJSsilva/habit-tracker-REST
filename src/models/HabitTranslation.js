@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const HabitTranslationSchema = new mongoose.Schema({
   habitId: {
@@ -9,7 +9,8 @@ const HabitTranslationSchema = new mongoose.Schema({
   language: {
     type: String,
     required: true,
-    match: [/^[a-z]{2}(-[A-Z]{2})?$/, "Language must be a two-letter code optionally followed by a hyphen and two uppercase letters"]  },
+    match: [/^[a-z]{2}(-[a-zA-Z]{2})?$/, "Language must be a two-letter code optionally followed by a hyphen and two letters"]
+  },
   name: {
     type: String,
     required: true,
@@ -27,8 +28,8 @@ const HabitTranslationSchema = new mongoose.Schema({
 });
 
 const HabitTranslation = mongoose.model(
-  "habit_translation",
+  "habit-translation",
   HabitTranslationSchema
 );
 
-module.exports = HabitTranslation;
+export default HabitTranslation;
