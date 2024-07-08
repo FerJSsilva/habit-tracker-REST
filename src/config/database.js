@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectToDatabase = () => {
+export const connectToDatabase = () => {
   const uri = process.env.DATABASE_URL;
 
   const clientOptions = {
@@ -16,5 +16,3 @@ const connectToDatabase = () => {
       console.error("Connection error", err);
     });
 }
-
-export default connectToDatabase;

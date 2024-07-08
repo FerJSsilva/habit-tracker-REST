@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 import isISO8601 from '../utils/isISO8601.js';
 const { Schema } = mongoose;
 
@@ -57,4 +57,4 @@ const UserHabitSchema = new Schema({
 
 const UserHabit = mongoose.model('user_habit', UserHabitSchema);
 
-module.exports = UserHabit;
+export default UserHabit;
