@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const CategoryTranslationSchema = new mongoose.Schema({
   categoryId: {
@@ -9,7 +9,7 @@ const CategoryTranslationSchema = new mongoose.Schema({
   language: {
     type: String,
     required: true,
-    match: [/^[a-z]{2}(-[A-Z]{2})?$/, "Language must be a two-letter code optionally followed by a hyphen and two uppercase letters"]
+    match: [/^[a-z]{2}(-[a-zA-Z]{2})?$/, "Language must be a two-letter code optionally followed by a hyphen and two letters"]
   },
   name: {
     type: String,
@@ -27,9 +27,24 @@ const CategoryTranslationSchema = new mongoose.Schema({
   },
 });
 
+ /* --------------------------- Disable POST Method -------------------------- */
+ CategoryTranslationSchema.statics.apiPost = async function (body) {
+  throw new Error('POST is disabled');
+}
+
+/* -------------------------- Disable UPDATE method ------------------------- */
+CategoryTranslationSchema.methods.apiPut = async function (body) {
+  throw new Error('UPDATE is disabled');
+}
+
+/* -------------------------- Disable DELETE method ------------------------- */
+CategoryTranslationSchema.methods.apiDelete = async function () {
+  throw new Error('DELETE is disabled');
+}
+
 const CategoryTranslation = mongoose.model(
-  "category_translation",
+  "category-translation",
   CategoryTranslationSchema
 );
 
-module.exports = CategoryTranslation;
+export default CategoryTranslation;
