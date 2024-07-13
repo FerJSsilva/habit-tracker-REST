@@ -1,0 +1,42 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Simple CRUD track",
+  "steps": [
+    {
+      "file": "src/index.js",
+      "description": "Here is where the server is started. Just a few lines to make the server run.",
+      "line": 32
+    },
+    {
+      "file": "src/models/Category.js",
+      "description": "This is a model file created by the MongoDB schema. Basically you just need to declare the entity name and the fields you need.",
+      "line": 1
+    },
+    {
+      "file": "src/models/User.js",
+      "description": "You can customize schemas to validate the input of what you are receiving in your API. You can set a field as required, trim the spaces, set the values to lowercase or upercase before saving, check if a value is unique and even check for a regex that dispatch a error message when is not matched.",
+      "line": 5
+    },
+    {
+      "file": "src/models/UserHabit.js",
+      "description": "You can relate other IDs from other schemas (table). This will check for valid related ids before saving a value.",
+      "line": 7
+    },
+    {
+      "file": "src/models/UserHabit.js",
+      "description": "It's possible to create custom functions to valide fields with custom error messages.",
+      "line": 40
+    },
+    {
+      "file": "src/index.js",
+      "description": "After you new schema is added, all you need to do is to import it in the main field.",
+      "line": 17
+    },
+    {
+      "file": "src/index.js",
+      "description": "This should be enough to have your new API up and Running. With all REST methods for GET, POST, PUT, DELETE, filter, pagination and relationship. Check the running port and make a request using <port>/api/<resource>",
+      "line": 38
+    }
+  ],
+  "ref": "main"
+}
