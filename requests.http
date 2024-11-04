@@ -3,9 +3,9 @@
 ### LIST
 GET http://localhost:4000/api/categories
 
-// ------------------------- Categorie translations ------------------------- //
+// ------------------------ Categories translations ------------------------- //
 
-### CATEGORY TRANSLATIONS
+### LIST
 GET http://localhost:4000/api/category-translations
 
 // --------------------------------- Habits --------------------------------- //
@@ -22,12 +22,12 @@ Content-Type: application/json
     "identifier": "WRITE_JOURNAL"
 }
 
-// --------------------------- Habit translations --------------------------- //
+// --------------------------- Habits translations -------------------------- //
 
-### HABIT TRANSLATIONS
+### LIST
 GET http://localhost:4000/api/habit-translations
 
-### NEW HABIT TRANSLATION
+### NEW
 POST http://localhost:4000/api/habit-translations
 Content-Type: application/json
 
@@ -38,7 +38,7 @@ Content-Type: application/json
     "description": "screver reflexões diárias para melhorar a escrita e a autoanálise."
 }
 
-### EDIT HABIT TRANSLATION
+### EDIT
 PUT http://localhost:4000/api/habit-translations/668b573752b1a31a65bf7348
 Content-Type: application/json
 

@@ -1,29 +1,27 @@
 {
-  "name": "node-esbuild-template",
+  "name": "node-fastify-template",
   "version": "1.0.0",
   "description": "Start your simple node project here",
-  "main": "index.js",
-  "repository": "https://github.com/FerJSsilva/node-esbuild-template.git",
+  "main": "src/index.js",
+  "type": "module",
+  "repository": "https://github.com/FerJSsilva/node-fastify-template.git",
   "author": "Fernando JS Silva <ferjssilva@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "esbuild src/index.js --bundle --outfile=dist/bundle.js --platform=node --format=cjs",
-    "watch": "chokidar \"src/**/*\" -c \"npm run build\"",
-    "server": "npm run build && node dist/bundle.js",
-    "start": "npm run build && concurrently \"npm run watch\" \"nodemon dist/bundle.js\""
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "devDependencies": {
-    "chokidar-cli": "^3.0.0",
-    "esbuild": "^0.20.2"
+    "nodemon": "^3.1.0"
   },
   "dependencies": {
     "@fastify/formbody": "^7.4.0",
-    "concurrently": "^8.2.2",
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^4.0.0",
+    "@fastify/static": "^6.8.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.27.0",
-    "fastify-formbody": "^5.3.0",
     "fastify-mongoose-api": "^1.2.23",
-    "mongoose": "^8.4.1",
-    "nodemon": "^3.1.0"
+    "mongoose": "^8.4.1"
   }
 }
