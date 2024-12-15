@@ -27,7 +27,16 @@ await server.register(fjwtJwks, {
 });
 
 // Add global authentication using onRequest hook
-server.addHook('preValidation', server.authenticate);
+server.addHook('preValidation', async (request, reply) => {
+  try {
+    await server.authenticate(request, reply);
+  } catch (error) {
+    reply.code(error.statusCode || 403).send({
+      error: 'Forbidden',
+      message: error.message
+    });
+  }
+});
 
 // Rota de exemplo
 server.get('/health', { 
