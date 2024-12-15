@@ -4,11 +4,18 @@ import mongoose from 'mongoose';
 import { connectToDatabase } from './config/database.js';
 import preSerialization from './hooks/preSerialization.js';
 import fastifyMongooseAPI from 'fastify-mongoose-api';
+import fjwtJwks from 'fastify-jwt-jwks';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const server = fastify({ logger: true });
+
+await server.register(fjwtJwks, {
+  jwksUrl: 'https://fernandojssilva.auth0.com/.well-known/jwks.json',
+  audience: 'habit-tracker-api'
+});
 
 server.register(fastifyFormbody);
 
@@ -37,6 +44,14 @@ server.register(fastifyMongooseAPI, {
 /* ------------------------------- Fastify Hooks ------------------------------ */
 
 server.addHook('preSerialization', preSerialization);
+
+
+// Rota de exemplo
+server.get('/authorized', { 
+  preValidation: server.authenticate 
+}, (request, reply) => {
+  reply.send({ message: 'Secured Resource' });
+});
 
 /* ------------------------------- Start Server ------------------------------ */
 const start = async () => {

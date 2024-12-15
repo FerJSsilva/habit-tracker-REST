@@ -18,6 +18,7 @@
     "@fastify/formbody": "^7.4.0",
     "dotenv": "^16.4.5",
     "fastify": "^4.27.0",
+    "fastify-jwt-jwks": "1.1.5",
     "fastify-mongoose-api": "^1.2.23",
     "mongoose": "^8.4.1"
   }
