@@ -26,6 +26,9 @@ await server.register(fjwtJwks, {
   audience: 'https://habit-tracker-api'
 });
 
+// Add global authentication using onRequest hook
+server.addHook('preValidation', server.authenticate);
+
 // Rota de exemplo
 server.get('/health', { 
   preValidation: server.authenticate 
