@@ -343,21 +343,12 @@ fastify-jwt-jwks@1.1.5:
     node-cache "^5.0.1"
     node-fetch "^2.6.1"
 
-fastify-mongoose-api@^1.2.23:
-  version "1.2.23"
-  resolved "https://registry.yarnpkg.com/fastify-mongoose-api/-/fastify-mongoose-api-1.2.23.tgz#7e6b2f48b644178ddf02061fc689bef56b5c05a4"
-  integrity sha512-iy+IAWSyRaezGXSsT2pr2gdc8Vd+Lma3eYG4NxQHSZoYW6f5bP3JK/2Pak1/yQeY1Z99TPs6jYySHzIkrHfgNw==
-  dependencies:
-    fastify "^4.26.0"
-    fastify-plugin "^4.5.1"
-    mongoose "^8.1.1"
-
-fastify-plugin@^4.0.0, fastify-plugin@^4.5.1:
+fastify-plugin@^4.0.0:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/fastify-plugin/-/fastify-plugin-4.5.1.tgz#44dc6a3cc2cce0988bc09e13f160120bbd91dbee"
   integrity sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==
 
-fastify@^4.26.0, fastify@^4.27.0:
+fastify@^4.27.0:
   version "4.27.0"
   resolved "https://registry.yarnpkg.com/fastify/-/fastify-4.27.0.tgz#e4a9b2a0a7b9efaeaf1140d47fdd4f91b5fcacb1"
   integrity sha512-ci9IXzbigB8dyi0mSy3faa3Bsj0xWAPb9JeT4KRzubdSb6pNhcADRUaXCBml6V1Ss/a05kbtQls5LBmhHydoTA==
@@ -569,7 +560,7 @@ mongodb@6.6.2:
     bson "^6.7.0"
     mongodb-connection-string-url "^3.0.0"
 
-mongoose@^8.1.1, mongoose@^8.4.1:
+mongoose@^8.4.1:
   version "8.4.1"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-8.4.1.tgz#21891c0b72890b33c7bb082b69a32f627b7043bf"
   integrity sha512-odQ2WEWGL3hb0Qex+QMN4eH6D34WdMEw7F1If2MGABApSDmG9cMmqv/G1H6WsXmuaH9mkuuadW/WbLE5+tHJwA==
