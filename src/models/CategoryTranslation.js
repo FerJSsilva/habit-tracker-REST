@@ -42,9 +42,7 @@ CategoryTranslationSchema.methods.apiDelete = async function () {
   throw new Error('DELETE is disabled');
 }
 
-const CategoryTranslation = mongoose.model(
+export default mongoose.model(
   "category-translation",
   CategoryTranslationSchema
 );
-
-export default CategoryTranslation;

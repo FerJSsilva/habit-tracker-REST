@@ -28,4 +28,4 @@ const AchievmentSchema = new Schema({
     },
   });
 
-mongoose.model('achievment', AchievmentSchema);
+export default mongoose.model('achievment', AchievmentSchema);

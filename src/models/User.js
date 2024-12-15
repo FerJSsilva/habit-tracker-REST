@@ -31,7 +31,4 @@ UserSchema.methods.apiDelete = async function () {
   throw new Error('DELETE is disabled');
 }
 
-
-const User = mongoose.model('user', UserSchema);
-
-export default User;
+export default mongoose.model('user', UserSchema);

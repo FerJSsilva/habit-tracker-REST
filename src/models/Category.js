@@ -28,4 +28,4 @@ categorySchema.methods.apiDelete = async function () {
   throw new Error('DELETE is disabled');
 }
 
-mongoose.model('category', categorySchema);
+export default mongoose.model('category', categorySchema);

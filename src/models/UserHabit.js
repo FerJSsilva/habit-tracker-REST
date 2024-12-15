@@ -55,6 +55,4 @@ const UserHabitSchema = new Schema({
   }
 });
 
-const UserHabit = mongoose.model('user_habit', UserHabitSchema);
-
-export default UserHabit;
+export default mongoose.model('user_habit', UserHabitSchema);

@@ -27,9 +27,7 @@ const HabitTranslationSchema = new mongoose.Schema({
   },
 });
 
-const HabitTranslation = mongoose.model(
+export default mongoose.model(
   "habit-translation",
   HabitTranslationSchema
 );
-
-export default HabitTranslation;

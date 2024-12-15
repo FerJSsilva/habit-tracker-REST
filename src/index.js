@@ -1,56 +1,42 @@
 import fastify from 'fastify';
-import fastifyFormbody from '@fastify/formbody';
-import mongoose from 'mongoose';
-import { connectToDatabase } from './config/database.js';
-import preSerialization from './hooks/preSerialization.js';
-import fastifyMongooseAPI from 'fastify-mongoose-api';
 import fjwtJwks from 'fastify-jwt-jwks';
-
+import { connectToDatabase } from './config/database.js';
+import createRoutes from './api.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const server = fastify({ logger: true });
 
-await server.register(fjwtJwks, {
-  jwksUrl: 'https://fernandojssilva.auth0.com/.well-known/jwks.json',
-  audience: 'habit-tracker-api'
-});
-
-server.register(fastifyFormbody);
-
 /* ----------------------------- MongoDB Models ----------------------------- */
 
-// Ensure that the models are imported so they are registered with Mongoose
-import './models/Achievment.js';
-import './models/Category.js';
-import './models/CategoryTranslation.js';
-import './models/Habit.js';
-import './models/HabitTranslation.js';
-import './models/User.js';
-import './models/UserHabit.js';
+import Achievments from './models/Achievment.js';
+import Categories from './models/Category.js';
+import CategoriesTranslation from './models/CategoryTranslation.js';
+import Habits from './models/Habit.js';
+import HabitsTranslation from './models/HabitTranslation.js';
+import Users from './models/User.js';
+import UsersHabits from './models/UserHabit.js';
 
 /* ------------------------------- Fastify Plugins ------------------------------ */
 
 
-// Register Mongoose API
-server.register(fastifyMongooseAPI, {
-  models: mongoose.models,
-  prefix: '/api/',
-  methods: ['list', 'get', 'post', 'put', 'delete'],
-  setDefaults: true,
+await server.register(fjwtJwks, {
+  jwksUrl: 'https://ferjssilva.auth0.com/.well-known/jwks.json',
+  audience: 'https://habit-tracker-api'
 });
 
-/* ------------------------------- Fastify Hooks ------------------------------ */
-
-server.addHook('preSerialization', preSerialization);
-
-
 // Rota de exemplo
-server.get('/authorized', { 
+server.get('/health', { 
   preValidation: server.authenticate 
 }, (request, reply) => {
   reply.send({ message: 'Secured Resource' });
+});
+
+// Register Mongoose API
+server.register(createRoutes, {
+  models: [Achievments, Categories, CategoriesTranslation, HabitsTranslation, Habits, Users, UsersHabits],
+  prefix: '/api',
 });
 
 /* ------------------------------- Start Server ------------------------------ */

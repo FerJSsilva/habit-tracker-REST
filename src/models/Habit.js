@@ -29,4 +29,4 @@ habitSchema.methods.apiDelete = async function () {
   throw new Error('DELETE is disabled');
 };
 
-mongoose.model('habit', habitSchema);
+export default mongoose.model('habit', habitSchema);
