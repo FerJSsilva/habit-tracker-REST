@@ -1,4 +1,3 @@
-// api.js
 import fp from 'fastify-plugin';
 
 // Transform MongoDB document for API response
@@ -66,9 +65,25 @@ function buildQuery(model, filters = {}, options = {}) {
   return query;
 }
 
+// Check if method is allowed for model
+function isMethodAllowed(modelName, method, allowedMethods) {
+  console.log('modelName', modelName);
+  console.log('method', method);
+  console.log('allowedMethods', allowedMethods[modelName]);
+  if (!allowedMethods) return true;
+  
+  // Find the matching key regardless of case
+  const key = Object.keys(allowedMethods).find(
+    k => k.toLowerCase() === modelName.toLowerCase()
+  );
+  
+  if (!key || !allowedMethods[key]) return true;
+  return allowedMethods[key].includes(method);
+}
+
 // Main plugin function
 async function createRoutes(fastify, options) {
-  const { models, prefix = '/api' } = options;
+  const { models, prefix = '/api', methods = {} } = options;
 
   // Setup error handler
   fastify.setErrorHandler((error, request, reply) => {
@@ -111,7 +126,7 @@ async function createRoutes(fastify, options) {
   // Setup routes for each model
   models.forEach(model => {
     const modelName = model.collection.name;
-    const baseRoute = `${prefix}/${modelName}`;
+    const baseRoute = `${prefix}/${model.collection.name}`;
     
     // Get searchable fields from schema
     const searchableFields = Object.keys(model.schema.paths).filter(
@@ -125,129 +140,8 @@ async function createRoutes(fastify, options) {
     });
 
     // List route (GET /api/resource)
-    fastify.get(baseRoute, async (request) => {
-      const {
-        page = 1,
-        limit = 10,
-        sort,
-        search,
-        populate,
-        ...filters
-      } = request.query;
-
-      // Convert string values to ObjectId for reference fields
-      referenceFields.forEach(field => {
-        if (filters[field]) {
-          filters[field] = model.schema.paths[field].cast(filters[field]);
-        }
-      });
-
-      const sortQuery = sort ? JSON.parse(sort) : { _id: -1 };
-      
-      const query = buildQuery(model, filters, {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        sort: sortQuery,
-        search,
-        searchFields: searchableFields,
-        populate
-      });
-
-      const [data, total] = await Promise.all([
-        query.exec(),
-        model.countDocuments(filters)
-      ]);
-
-      return {
-        data: data.map(doc => transformDocument(doc)),
-        pagination: {
-          total,
-          page: parseInt(page),
-          limit: parseInt(limit),
-          pages: Math.ceil(total / limit)
-        }
-      };
-    });
-
-    // Get single resource (GET /api/resource/:id)
-    fastify.get(`${baseRoute}/:id`, async (request, reply) => {
-      const { id } = request.params;
-      const { populate } = request.query;
-
-      let query = model.findById(id);
-
-      if (populate) {
-        const populateFields = Array.isArray(populate) ? populate : [populate];
-        populateFields.forEach(field => {
-          query = query.populate(field);
-        });
-      }
-
-      const doc = await query.exec();
-
-      if (!doc) {
-        reply.code(404).send({
-          error: 'NotFound',
-          message: 'Resource not found'
-        });
-        return;
-      }
-
-      return transformDocument(doc);
-    });
-
-    // Create resource (POST /api/resource)
-    fastify.post(baseRoute, async (request) => {
-      const doc = new model(request.body);
-      await doc.save();
-      return transformDocument(doc);
-    });
-
-    // Update resource (PUT /api/resource/:id)
-    fastify.put(`${baseRoute}/:id`, async (request, reply) => {
-      const { id } = request.params;
-      
-      const doc = await model.findByIdAndUpdate(
-        id,
-        request.body,
-        { new: true, runValidators: true }
-      );
-
-      if (!doc) {
-        reply.code(404).send({
-          error: 'NotFound',
-          message: 'Resource not found'
-        });
-        return;
-      }
-
-      return transformDocument(doc);
-    });
-
-    // Delete resource (DELETE /api/resource/:id)
-    fastify.delete(`${baseRoute}/:id`, async (request, reply) => {
-      const { id } = request.params;
-      
-      const doc = await model.findByIdAndDelete(id);
-
-      if (!doc) {
-        reply.code(404).send({
-          error: 'NotFound',
-          message: 'Resource not found'
-        });
-        return;
-      }
-
-      return { success: true };
-    });
-
-    // Setup nested routes for references
-    referenceFields.forEach(refField => {
-      const refModel = model.schema.paths[refField].options.ref.toLowerCase();
-      const nestedRoute = `${prefix}/${refModel}/:refId/${modelName}`;
-
-      // GET /api/users/:userId/habits
-      fastify.get(nestedRoute, async (request) => {
+    if (isMethodAllowed(modelName, 'GET', methods)) {
+      fastify.get(baseRoute, async (request) => {
         const {
           page = 1,
           limit = 10,
@@ -257,8 +151,12 @@ async function createRoutes(fastify, options) {
           ...filters
         } = request.query;
 
-        const { refId } = request.params;
-        filters[refField] = model.schema.paths[refField].cast(refId);
+        // Convert string values to ObjectId for reference fields
+        referenceFields.forEach(field => {
+          if (filters[field]) {
+            filters[field] = model.schema.paths[field].cast(filters[field]);
+          }
+        });
 
         const sortQuery = sort ? JSON.parse(sort) : { _id: -1 };
         
@@ -286,7 +184,134 @@ async function createRoutes(fastify, options) {
           }
         };
       });
-    });
+
+      // Get single resource (GET /api/resource/:id)
+      fastify.get(`${baseRoute}/:id`, async (request, reply) => {
+        const { id } = request.params;
+        const { populate } = request.query;
+
+        let query = model.findById(id);
+
+        if (populate) {
+          const populateFields = Array.isArray(populate) ? populate : [populate];
+          populateFields.forEach(field => {
+            query = query.populate(field);
+          });
+        }
+
+        const doc = await query.exec();
+
+        if (!doc) {
+          reply.code(404).send({
+            error: 'NotFound',
+            message: 'Resource not found'
+          });
+          return;
+        }
+
+        return transformDocument(doc);
+      });
+    }
+
+    // Create resource (POST /api/resource)
+    if (isMethodAllowed(modelName, 'POST', methods)) {
+      fastify.post(baseRoute, async (request) => {
+        const doc = new model(request.body);
+        await doc.save();
+        return transformDocument(doc);
+      });
+    }
+
+    // Update resource (PUT /api/resource/:id)
+    if (isMethodAllowed(modelName, 'PUT', methods)) {
+      fastify.put(`${baseRoute}/:id`, async (request, reply) => {
+        const { id } = request.params;
+        
+        const doc = await model.findByIdAndUpdate(
+          id,
+          request.body,
+          { new: true, runValidators: true }
+        );
+
+        if (!doc) {
+          reply.code(404).send({
+            error: 'NotFound',
+            message: 'Resource not found'
+          });
+          return;
+        }
+
+        return transformDocument(doc);
+      });
+    }
+
+    // Delete resource (DELETE /api/resource/:id)
+    if (isMethodAllowed(modelName, 'DELETE', methods)) {
+      fastify.delete(`${baseRoute}/:id`, async (request, reply) => {
+        const { id } = request.params;
+        
+        const doc = await model.findByIdAndDelete(id);
+
+        if (!doc) {
+          reply.code(404).send({
+            error: 'NotFound',
+            message: 'Resource not found'
+          });
+          return;
+        }
+
+        return { success: true };
+      });
+    }
+
+    // Setup nested routes for references
+    if (isMethodAllowed(modelName, 'GET', methods)) {
+      referenceFields.forEach(refField => {
+        const refModel = model.schema.paths[refField].options.ref.toLowerCase();
+        const nestedRoute = `${prefix}/${refModel}/:refId/${model.collection.name}`;
+
+        // GET /api/users/:userId/habits
+        fastify.get(nestedRoute, async (request) => {
+          const {
+            page = 1,
+            limit = 10,
+            sort,
+            search,
+            populate,
+            ...filters
+          } = request.query;
+
+          const { refId } = request.params;
+          filters[refField] = model.schema.paths[refField].cast(refId);
+
+          const sortQuery = sort ? JSON.parse(sort) : { _id: -1 };
+          
+          const query = buildQuery(model, filters, {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            sort: sortQuery,
+            search,
+            searchFields: searchableFields,
+            populate
+          });
+
+          const [data, total] = await Promise.all([
+            query.exec(),
+            model.countDocuments(filters)
+          ]);
+
+          return {
+            data: data.map(doc => transformDocument(doc)),
+            pagination: {
+              total,
+              page: parseInt(page),
+              limit: parseInt(limit),
+              pages: Math.ceil(total / limit)
+            }
+          };
+        });
+      });
+    }
   });
 }
 
