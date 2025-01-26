@@ -15,6 +15,7 @@
     "nodemon": "^3.1.0"
   },
   "dependencies": {
+    "@ferjssilva/fast-crud-api": "^0.0.2",
     "dotenv": "^16.4.5",
     "fastify": "^5.2.0",
     "fastify-jwt-jwks": "^2.0.0",

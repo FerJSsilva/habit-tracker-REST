@@ -1,7 +1,7 @@
 import fastify from 'fastify';
 import fjwtJwks from 'fastify-jwt-jwks';
 import { connectToDatabase } from './config/database.js';
-import createRoutes from './api.js';
+import createRoutes from '@ferjssilva/fast-crud-api'
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -39,7 +39,12 @@ server.addHook('preValidation', async (request, reply) => {
 });
 
 // Rota de exemplo
-server.get('/health', { 
+server.get('/health', (request, reply) => {
+  reply.send({ message: 'App is running' });
+});
+
+// Rota de exemplo
+server.get('/authorized', { 
   preValidation: server.authenticate 
 }, (request, reply) => {
   reply.send({ message: 'Secured Resource' });
@@ -49,6 +54,15 @@ server.get('/health', {
 server.register(createRoutes, {
   models: [Achievments, Categories, CategoriesTranslation, HabitsTranslation, Habits, Users, UsersHabits],
   prefix: '/api',
+  methods: {
+    "achievments": ['GET', 'POST', 'PUT', 'DELETE'],
+    "categories": ['GET', 'POST', 'PUT', 'DELETE'],
+    "category-translations": ['GET', 'POST', 'PUT'],
+    "habits": ['GET', 'POST', 'PUT', 'DELETE'],
+    "habit-translations": ['GET', 'POST', 'PUT'],
+    "users": ['GET', 'POST'],
+    "user_habits": ['GET', 'POST', 'PUT', 'DELETE']
+  }
 });
 
 /* ------------------------------- Start Server ------------------------------ */
