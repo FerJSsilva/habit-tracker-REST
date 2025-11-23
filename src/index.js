@@ -3,10 +3,12 @@ import fjwtJwks from 'fastify-jwt-jwks';
 import { connectToDatabase } from './config/database.js';
 import createRoutes from '@ferjssilva/fast-crud-api'
 import dotenv from 'dotenv';
+import fastifyCors from '@fastify/cors';
+import loggerOptions from './config/logger.js';
 
 dotenv.config();
 
-const server = fastify({ logger: true });
+const server = fastify({ logger: loggerOptions });
 
 /* ----------------------------- MongoDB Models ----------------------------- */
 
@@ -20,6 +22,11 @@ import UsersHabits from './models/UserHabit.js';
 
 /* ------------------------------- Fastify Plugins ------------------------------ */
 
+// Register CORS plugin
+await server.register(fastifyCors, {
+  origin: true, // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
+});
 
 await server.register(fjwtJwks, {
   jwksUrl: 'https://ferjssilva.auth0.com/.well-known/jwks.json',
@@ -27,16 +34,20 @@ await server.register(fjwtJwks, {
 });
 
 // Add global authentication using onRequest hook
-server.addHook('preValidation', async (request, reply) => {
-  try {
-    await server.authenticate(request, reply);
-  } catch (error) {
-    reply.code(error.statusCode || 403).send({
-      error: 'Forbidden',
-      message: error.message
-    });
-  }
-});
+// server.addHook('preValidation', async (request, reply) => {
+//   console.log('Request:', request);
+//   try {
+//     await server.authenticate(request, reply);
+//   } catch (error) {
+//     reply.code(error.statusCode || 403).send({
+//       error: 'Forbidden',
+//       message: error.message
+//     });
+//   }
+// });
+
+// Register HTTP Cache Plugin
+await server.register(import('./plugins/httpCache.js'));
 
 // Rota de exemplo
 server.get('/health', (request, reply) => {
@@ -58,10 +69,10 @@ server.register(createRoutes, {
     "achievments": ['GET', 'POST', 'PUT', 'DELETE'],
     "categories": ['GET', 'POST', 'PUT', 'DELETE'],
     "category-translations": ['GET', 'POST', 'PUT'],
-    "habits": ['GET', 'POST', 'PUT', 'DELETE'],
+    "habits": ['GET', 'POST', 'PUT', 'DELETE'],  // Keep GET in the auto-generated routes
     "habit-translations": ['GET', 'POST', 'PUT'],
     "users": ['GET', 'POST'],
-    "user_habits": ['GET', 'POST', 'PUT', 'DELETE']
+    "user-habits": ['GET', 'POST', 'PUT', 'DELETE']
   }
 });
 
