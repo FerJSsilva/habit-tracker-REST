@@ -1,0 +1,205 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Habit Tracker - Complete Feature Guide",
+  "steps": [
+    {
+      "title": "Getting Started: Server Initialization",
+      "file": "src/index.js",
+      "description": "The application starts here with Fastify, a high-performance web framework. We initialize the server with logging enabled, register CORS to allow all origins, and set up Auth0 JWT authentication (currently commented out for development).",
+      "line": 11
+    },
+    {
+      "title": "Getting Started: Database Connection",
+      "file": "src/config/database.js",
+      "description": "MongoDB connection is handled here using Mongoose. The DATABASE_URL environment variable contains the connection string. We use MongoDB Server API v1 with strict mode for better compatibility and error handling.",
+      "line": 5
+    },
+    {
+      "title": "Auto-CRUD Magic: Model Imports",
+      "file": "src/index.js",
+      "description": "All Mongoose models are imported here. Each model represents a database collection: Achievements track habit completions, Categories and Habits define what can be tracked, Translations provide multi-language support, Users identify who's tracking, and UserHabits link users to their chosen habits with scheduling.",
+      "line": 14
+    },
+    {
+      "title": "Auto-CRUD Magic: Route Generation",
+      "file": "src/index.js",
+      "description": "This is where the magic happens! The @ferjssilva/fast-crud-api plugin automatically generates full REST endpoints (GET, POST, PUT, DELETE) for all models. Just pass your models and configure which methods are allowed. It also provides pagination (?page=2&limit=3), filtering (?field=value), search (?search=keyword), and population (?populate=fieldName) out of the box.",
+      "line": 105
+    },
+    {
+      "title": "Core Data Models: Category",
+      "file": "src/models/Category.js",
+      "description": "Categories are the top-level organization for habits (e.g., Health, Productivity, Social). The identifier field is uppercase, unique, and cannot contain spaces - this ensures clean API references. Notice the regex validation that enforces these rules.",
+      "line": 4
+    },
+    {
+      "title": "Core Data Models: Habit",
+      "file": "src/models/Habit.js",
+      "description": "Habits define trackable activities linked to categories. Like categories, they use uppercase identifiers without spaces (e.g., 'WRITE_JOURNAL', 'EXERCISE_MORNING'). The categoryId reference ensures every habit belongs to a valid category.",
+      "line": 4
+    },
+    {
+      "title": "Core Data Models: User",
+      "file": "src/models/User.js",
+      "description": "The User model is intentionally simple - just a unique username. This keeps the API focused on habit tracking rather than user management. In production, you'd typically integrate with an authentication provider like Auth0 (which is already configured in this app).",
+      "line": 4
+    },
+    {
+      "title": "Model Relationships: UserHabit",
+      "file": "src/models/UserHabit.js",
+      "description": "UserHabit is where the relationship magic happens. It links a User to a Habit using ObjectId references. Mongoose validates that these IDs exist in their respective collections before saving, preventing orphaned records.",
+      "line": 6
+    },
+    {
+      "title": "Model Relationships: Achievement",
+      "file": "src/models/Achievment.js",
+      "description": "Achievements track when a user completes a habit on a specific date. Each record captures the habitId, userId, completion date in ISO 8601 format, and a boolean status. This is the foundation for streak calculations and progress tracking.",
+      "line": 6
+    },
+    {
+      "title": "Immutability Pattern: Preventing Updates",
+      "file": "src/models/Habit.js",
+      "description": "Habits are immutable after creation - they cannot be updated or deleted. This is enforced by custom apiPut and apiDelete methods that throw errors. Why? To preserve data integrity for historical tracking. If a habit definition changed, past achievements would become meaningless.",
+      "line": 19
+    },
+    {
+      "title": "Immutability Pattern: Category Protection",
+      "file": "src/models/Category.js",
+      "description": "Categories take immutability even further - you can't POST, PUT, or DELETE them via the API. This prevents accidental modification of the foundational taxonomy. In practice, categories would be seeded during deployment rather than managed through the API.",
+      "line": 16
+    },
+    {
+      "title": "Custom Validation: Regex Patterns",
+      "file": "src/models/User.js",
+      "description": "Mongoose schemas support powerful validation. Here we see required fields, uniqueness constraints, and automatic trimming. The trim option removes whitespace before saving, preventing accidental duplicates like 'user' vs ' user '.",
+      "line": 4
+    },
+    {
+      "title": "Custom Validation: ISO 8601 Dates",
+      "file": "src/models/UserHabit.js",
+      "description": "Date fields use custom validation to enforce ISO 8601 format (e.g., '2023-10-01T00:00:00Z'). This ensures consistent date handling across timezones and prevents format confusion. The validator is a reusable utility function.",
+      "line": 31
+    },
+    {
+      "title": "Custom Validation: Utility Function",
+      "file": "src/utils/isISO8601.js",
+      "description": "The ISO 8601 validator uses regex to check the date format: YYYY-MM-DDTHH:MM:SS with timezone (Z or ±HH:MM). This regex is reused across multiple models (UserHabit, Achievement) to maintain consistency.",
+      "line": 2
+    },
+    {
+      "title": "Multi-Language Support: Category Translations",
+      "file": "src/models/CategoryTranslation.js",
+      "description": "Translation models enable internationalization. Each CategoryTranslation links to a category and provides localized name/description in a specific language (e.g., 'en-us', 'pt-br'). The language field validates the format using regex: two lowercase letters, optionally followed by a hyphen and two more letters.",
+      "line": 4
+    },
+    {
+      "title": "Multi-Language Support: Habit Translations",
+      "file": "src/models/HabitTranslation.js",
+      "description": "HabitTranslations work the same way as CategoryTranslations. Unlike the base Habit model (which is immutable), translations can be fully updated. This allows fixing typos or improving descriptions without affecting the core habit data.",
+      "line": 4
+    },
+    {
+      "title": "Habit Tracking: Scheduling System",
+      "file": "src/models/UserHabit.js",
+      "description": "The selectedDays field defines when a habit should occur (e.g., '1,2,3,4,5,6,7' for daily, '1,3,5' for Mon/Wed/Fri). This comma-separated format allows flexible scheduling patterns.",
+      "line": 14
+    },
+    {
+      "title": "Habit Tracking: Time Periods",
+      "file": "src/models/UserHabit.js",
+      "description": "Habits can be scheduled for different parts of the day: anytime, morning, afternoon, or evening. These are stored as numbers (0 or 1) acting as boolean flags. A habit could be valid for multiple periods (e.g., morning AND evening).",
+      "line": 18
+    },
+    {
+      "title": "Habit Tracking: Date Ranges & Streaks",
+      "file": "src/models/UserHabit.js",
+      "description": "Every UserHabit has a start and end date defining its active period. The streak field tracks consecutive completions, perfect for gamification. Combined with Achievements, this enables powerful progress tracking and motivation systems.",
+      "line": 31
+    },
+    {
+      "title": "Advanced Features: Response Serialization",
+      "file": "src/hooks/preSerialization.js",
+      "description": "This hook transforms MongoDB responses before sending them to clients. It converts '_id' to 'id' (more REST-friendly) and removes '__v' (version key). It handles both single objects and arrays of items, making the API cleaner and more intuitive.",
+      "line": 2
+    },
+    {
+      "title": "Advanced Features: Time Constants Utility",
+      "file": "src/utils/timeConstants.js",
+      "description": "This utility defines time constants for caching and expiration headers. It includes pre-defined durations (SHORT: 5min, MEDIUM: 1hr, LONG: 1day, etc.) and helper functions for generating ETag values and expiration dates. Currently unused but ready for performance optimization.",
+      "line": 13
+    },
+    {
+      "title": "Advanced Features: Auth0 JWT Setup",
+      "file": "src/index.js",
+      "description": "Auth0 JWT authentication is configured using fastify-jwt-jwks. The plugin validates JWT tokens against Auth0's public keys. Currently commented out for development, but ready to enable by uncommenting the preValidation hook below.",
+      "line": 29
+    },
+    {
+      "title": "Advanced Features: Global Authentication Hook",
+      "file": "src/index.js",
+      "description": "This commented hook would enforce authentication on ALL routes. When enabled, every request must include a valid JWT token. The /authorized endpoint below demonstrates how to protect individual routes using preValidation: server.authenticate.",
+      "line": 36
+    },
+    {
+      "title": "Advanced Features: Caching Strategy",
+      "file": "src/index.js",
+      "description": "This commented code shows a caching strategy for the habits endpoint. Since habits are immutable, they can be cached for a full year (31536000 seconds). The ETag implementation below provides conditional GET support for even better performance.",
+      "line": 49
+    },
+    {
+      "title": "Advanced Features: ETag Generation",
+      "file": "src/index.js",
+      "description": "This sophisticated hook generates MD5-based ETags for GET responses. Clients can send If-None-Match headers with the ETag, and the server responds with 304 Not Modified if content hasn't changed, saving bandwidth. Perfect for mobile apps and slow connections.",
+      "line": 58
+    },
+    {
+      "title": "API Usage: Health Check",
+      "file": "requests.http",
+      "description": "The /health endpoint is a simple public route for monitoring. No authentication required - useful for load balancers and uptime monitoring tools.",
+      "line": 8
+    },
+    {
+      "title": "API Usage: Pagination",
+      "file": "requests.http",
+      "description": "Add ?page=2&limit=3 to any GET request for pagination. Page is 1-indexed, and limit controls how many items per page. Perfect for mobile apps or infinite scroll implementations.",
+      "line": 54
+    },
+    {
+      "title": "API Usage: Filtering",
+      "file": "requests.http",
+      "description": "Filter results by any field: ?language=en-us returns only English translations. You can combine multiple filters: ?language=en-us&habitId=123 for precise queries.",
+      "line": 59
+    },
+    {
+      "title": "API Usage: Search",
+      "file": "requests.http",
+      "description": "The ?search=uma parameter performs text search across searchable fields (typically name and description). Great for autocomplete and user-friendly search features.",
+      "line": 64
+    },
+    {
+      "title": "API Usage: Population",
+      "file": "requests.http",
+      "description": "Use ?populate=habitId to resolve ObjectId references into full objects. Instead of just getting an ID, you get the complete habit data embedded in the response. You can populate multiple fields: ?populate=habitId,userId",
+      "line": 69
+    },
+    {
+      "title": "API Usage: Creating Resources",
+      "file": "requests.http",
+      "description": "POST requests create new resources. Notice the JSON body matches the schema exactly - all required fields must be present. The API validates data against the Mongoose schema and returns detailed error messages if validation fails.",
+      "line": 77
+    },
+    {
+      "title": "API Usage: Creating UserHabits",
+      "file": "requests.http",
+      "description": "Creating a UserHabit requires all scheduling fields: selectedDays (when), time periods (what part of day), date range (how long), and initial streak (0 to start). This example shows a daily habit valid anytime, running for the entire month of October.",
+      "line": 107
+    },
+    {
+      "title": "You're Ready!",
+      "file": "src/index.js",
+      "description": "You've completed the tour! You now understand: (1) How auto-CRUD generates REST endpoints from models, (2) The immutability pattern protecting critical data, (3) Multi-language support through translation models, (4) Complex habit scheduling with time periods and streaks, (5) Advanced features like Auth0, caching, and ETags. The API is production-ready - just uncomment the authentication hooks and you're set!",
+      "line": 130
+    }
+  ],
+  "ref": "main"
+}
