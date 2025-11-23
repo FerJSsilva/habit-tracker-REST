@@ -9,9 +9,9 @@ const UserHabitSchema = new Schema({
     required: true
   },
   userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: String,
+    required: true,
+    index: true
   },
   selectedDays: {
     type: String,

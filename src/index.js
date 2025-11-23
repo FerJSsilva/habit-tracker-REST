@@ -45,6 +45,13 @@ server.get('/health', (request, reply) => {
 server.register(async (instance) => {
   instance.addHook('preHandler', instance.requireAuth());
 
+  // Automatically inject userId from token into request body for POST/PUT
+  instance.addHook('preHandler', async (request) => {
+    if (request.user && request.user.sub && request.body && typeof request.body === 'object') {
+      request.body.userId = request.user.sub;
+    }
+  });
+
   instance.register(createRoutes, {
     models: [Achievments, Categories, CategoriesTranslation, HabitsTranslation, Habits, Users, UsersHabits],
     prefix: '/api',
