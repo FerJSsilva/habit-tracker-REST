@@ -1,3 +1,6 @@
+# ignore TODO file from VSCode extensions
+TODO
+
 # Logs
 logs
 *.log
