@@ -18,15 +18,4 @@ const habitSchema = new Schema({
   },
 });
 
-/* -------------------------- Disable UPDATE method ------------------------- */
-habitSchema.methods.apiPut = async function (body) {
-  throw new Error('UPDATE is disabled');
-}
-
-/* -------------------------- Disable DELETE method ------------------------- */
-
-habitSchema.methods.apiDelete = async function () {
-  throw new Error('DELETE is disabled');
-};
-
 export default mongoose.model('habit', habitSchema);

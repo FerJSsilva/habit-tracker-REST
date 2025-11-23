@@ -27,21 +27,6 @@ const CategoryTranslationSchema = new mongoose.Schema({
   },
 });
 
- /* --------------------------- Disable POST Method -------------------------- */
- CategoryTranslationSchema.statics.apiPost = async function (body) {
-  throw new Error('POST is disabled');
-}
-
-/* -------------------------- Disable UPDATE method ------------------------- */
-CategoryTranslationSchema.methods.apiPut = async function (body) {
-  throw new Error('UPDATE is disabled');
-}
-
-/* -------------------------- Disable DELETE method ------------------------- */
-CategoryTranslationSchema.methods.apiDelete = async function () {
-  throw new Error('DELETE is disabled');
-}
-
 export default mongoose.model(
   "category-translation",
   CategoryTranslationSchema
