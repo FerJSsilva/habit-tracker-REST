@@ -12,10 +12,13 @@
     "dev": "nodemon src/index.js"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "pino-pretty": "^13.1.2"
   },
   "dependencies": {
-    "@ferjssilva/fast-crud-api": "^0.0.2",
+    "@fastify/cors": "^10.0.2",
+    "@ferjssilva/fast-crud-api": "^0.1.0",
+    "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "fastify": "^5.2.0",
     "fastify-jwt-jwks": "^2.0.0",
