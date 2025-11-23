@@ -42,9 +42,6 @@ export {
   MONTH,
   YEAR,
   
-  // Durações de cache pré-definidas
-  CACHE_DURATIONS,
-  
   // Funções auxiliares
   getExpirationDate,
   generateETag

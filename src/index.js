@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import fjwtJwks from 'fastify-jwt-jwks';
+import Auth0 from '@auth0/auth0-fastify-api';
 import { connectToDatabase } from './config/database.js';
 import createRoutes from '@ferjssilva/fast-crud-api'
 import dotenv from 'dotenv';
@@ -28,23 +28,10 @@ await server.register(fastifyCors, {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow these methods
 });
 
-await server.register(fjwtJwks, {
-  jwksUrl: 'https://ferjssilva.auth0.com/.well-known/jwks.json',
-  audience: 'https://habit-tracker-api'
+await server.register(Auth0, {
+  domain: process.env.AUTH0_DOMAIN,
+  audience: process.env.AUTH0_AUDIENCE,
 });
-
-// Add global authentication using onRequest hook
-// server.addHook('preValidation', async (request, reply) => {
-//   console.log('Request:', request);
-//   try {
-//     await server.authenticate(request, reply);
-//   } catch (error) {
-//     reply.code(error.statusCode || 403).send({
-//       error: 'Forbidden',
-//       message: error.message
-//     });
-//   }
-// });
 
 // Register HTTP Cache Plugin
 await server.register(import('./plugins/httpCache.js'));
@@ -54,26 +41,23 @@ server.get('/health', (request, reply) => {
   reply.send({ message: 'App is running' });
 });
 
-// Rota de exemplo
-server.get('/authorized', { 
-  preValidation: server.authenticate 
-}, (request, reply) => {
-  reply.send({ message: 'Secured Resource' });
-});
-
 // Register Mongoose API
-server.register(createRoutes, {
-  models: [Achievments, Categories, CategoriesTranslation, HabitsTranslation, Habits, Users, UsersHabits],
-  prefix: '/api',
-  methods: {
-    "achievments": ['GET', 'POST', 'PUT', 'DELETE'],
-    "categories": ['GET', 'POST', 'PUT', 'DELETE'],
-    "category-translations": ['GET', 'POST', 'PUT'],
-    "habits": ['GET', 'POST', 'PUT', 'DELETE'],  // Keep GET in the auto-generated routes
-    "habit-translations": ['GET', 'POST', 'PUT'],
-    "users": ['GET', 'POST'],
-    "user-habits": ['GET', 'POST', 'PUT', 'DELETE']
-  }
+server.register(async (instance) => {
+  instance.addHook('preHandler', instance.requireAuth());
+
+  instance.register(createRoutes, {
+    models: [Achievments, Categories, CategoriesTranslation, HabitsTranslation, Habits, Users, UsersHabits],
+    prefix: '/api',
+    methods: {
+      "achievments": ['GET', 'POST', 'PUT', 'DELETE'],
+      "categories": ['GET', 'POST', 'PUT', 'DELETE'],
+      "category-translations": ['GET', 'POST', 'PUT'],
+      "habits": ['GET', 'POST', 'PUT', 'DELETE'],  // Keep GET in the auto-generated routes
+      "habit-translations": ['GET', 'POST', 'PUT'],
+      "users": ['GET', 'POST'],
+      "user-habits": ['GET', 'POST', 'PUT', 'DELETE']
+    }
+  });
 });
 
 /* ------------------------------- Start Server ------------------------------ */
