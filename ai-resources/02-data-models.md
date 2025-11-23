@@ -8,7 +8,6 @@
   categoryId: ObjectId,  // Required, references Category
   identifier: String     // Required, unique, uppercase, max 20 chars, no spaces
 }
-// Methods UPDATE and DELETE are disabled
 ```
 
 ### HabitTranslation
@@ -26,10 +25,6 @@
 {
   username: String       // Required, unique, trimmed
 }
-// Restrictions:
-// - UPDATE disabled
-// - DELETE disabled
-// - GET restricted to username only
 ```
 
 ### Category
