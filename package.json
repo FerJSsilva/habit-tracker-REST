@@ -19,7 +19,7 @@
   "dependencies": {
     "@auth0/auth0-fastify-api": "^1.1.0",
     "@fastify/cors": "^10.0.2",
-    "@ferjssilva/fast-crud-api": "^0.1.0",
+    "@ferjssilva/fast-crud-api": "0.2.0",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "fastify": "^5.2.0",

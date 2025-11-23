@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@ferjssilva/fast-crud-api': link:../fast-crud-api.worktrees/claude/add-user-scoped-resources-019waVNWfGPBJ9Xs4GLvCoZ1
+
 importers:
 
   .:
@@ -15,8 +18,8 @@ importers:
         specifier: ^10.0.2
         version: 10.1.0
       '@ferjssilva/fast-crud-api':
-        specifier: ^0.1.0
-        version: 0.1.2(fastify@5.6.2)(mongoose@8.20.1)
+        specifier: 0.2.0
+        version: 0.2.0(fastify@5.6.2)(mongoose@8.20.1)
       crypto-js:
         specifier: ^4.2.0
         version: 4.2.0
@@ -72,8 +75,8 @@ packages:
   '@fastify/proxy-addr@5.1.0':
     resolution: {integrity: sha512-INS+6gh91cLUjB+PVHfu1UqcB76Sqtpyp7bnL+FYojhjygvOPA9ctiD/JDKsyD9Xgu4hUhCSJBPig/w7duNajw==}
 
-  '@ferjssilva/fast-crud-api@0.1.2':
-    resolution: {integrity: sha512-zL+oDaedhlAcxoR8G/mTW+scltsRrhuutj/vTOl2wpRzcXm1CG4NOyqDcWzvWvGvLiuMYqMUkf6I5TUnnMAqdg==}
+  '@ferjssilva/fast-crud-api@0.2.0':
+    resolution: {integrity: sha512-1sGWpQKwOKiyp+6isA5KRQWEu+ELthVf0Z3ERo4fUliyklaz8Zsh7qHzHxNSliP8PmmNJMMO1DFhjB1xX/6dGg==}
     peerDependencies:
       fastify: '>=4.0.0'
       mongoose: '>=6.0.0'
@@ -535,7 +538,7 @@ snapshots:
       '@fastify/forwarded': 3.0.1
       ipaddr.js: 2.2.0
 
-  '@ferjssilva/fast-crud-api@0.1.2(fastify@5.6.2)(mongoose@8.20.1)':
+  '@ferjssilva/fast-crud-api@0.2.0(fastify@5.6.2)(mongoose@8.20.1)':
     dependencies:
       fastify: 5.6.2
       fastify-plugin: 5.1.0

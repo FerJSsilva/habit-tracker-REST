@@ -45,10 +45,10 @@ server.get('/health', (request, reply) => {
 server.register(async (instance) => {
   instance.addHook('preHandler', instance.requireAuth());
 
-  // Automatically inject userId from token into request body for POST/PUT
+  // Map authenticated user ID for user-scope middleware
   instance.addHook('preHandler', async (request) => {
-    if (request.user && request.user.sub && request.body && typeof request.body === 'object') {
-      request.body.userId = request.user.sub;
+    if (request.user?.sub) {
+      request.userId = request.user.sub;
     }
   });
 
@@ -63,7 +63,8 @@ server.register(async (instance) => {
       "habit-translations": ['GET', 'POST', 'PUT'],
       "users": ['GET', 'POST'],
       "user-habits": ['GET', 'POST', 'PUT', 'DELETE']
-    }
+    },
+    userScoped: ['user-habits', 'achievements']
   });
 });
 
