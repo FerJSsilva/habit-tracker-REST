@@ -55,4 +55,4 @@ const UserHabitSchema = new Schema({
   }
 });
 
-export default mongoose.model('user_habit', UserHabitSchema);
+export default mongoose.model('user-habit', UserHabitSchema);
