@@ -28,6 +28,6 @@ src/
 
 ## Development Environment
 - Default Port: 4000 (configurable via PORT env var)
-- Development Mode: `yarn dev` (with hot-reload)
-- Production Mode: `yarn start`
+- Development Mode: `pnpm dev` (with hot-reload)
+- Production Mode: `pnpm start`
 - Documentation: Built-in via requests.http file

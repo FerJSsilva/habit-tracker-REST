@@ -18,7 +18,7 @@ To set up this project:
 
 2. **Install dependencies**:
    ```bash
-   npm install
+   pnpm install
    ```
 
 ## Development
@@ -27,7 +27,7 @@ To start developing with live reloading:
 
 1. **Run the development server**:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 This command uses `concurrently` to run `esbuild` in watch mode and `nodemon` to restart the server when the bundle file is updated. This setup allows you to see changes in real time without manually restarting the server.
@@ -38,7 +38,7 @@ To build the application for production:
 
 1. **Build the project**:
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 This will bundle all JavaScript files into a single output file in the `dist` directory, optimized for production use.
@@ -53,9 +53,9 @@ This will bundle all JavaScript files into a single output file in the `dist` di
 
 ## Scripts Explained
 
-- `npm run dev`: Runs the development environment with live reloading.
-- `npm run build`: Bundles the code for production.
-- `npm run start`: Starts the server using the production bundle.
+- `pnpm run dev`: Runs the development environment with live reloading.
+- `pnpm run build`: Bundles the code for production.
+- `pnpm run start`: Starts the server using the production bundle.
 
 For more detailed documentation on `esbuild`, visit the [official esbuild GitHub page](https://github.com/evanw/esbuild).
 

@@ -7,6 +7,7 @@
   "repository": "https://github.com/FerJSsilva/node-fastify-template.git",
   "author": "Fernando JS Silva <ferjssilva@gmail.com>",
   "license": "MIT",
+  "packageManager": "pnpm@10.14.0",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
