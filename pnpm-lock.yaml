@@ -4,9 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@ferjssilva/fast-crud-api': link:../fast-crud-api.worktrees/claude/add-user-scoped-resources-019waVNWfGPBJ9Xs4GLvCoZ1
-
 importers:
 
   .:
